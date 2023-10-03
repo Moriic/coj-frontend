@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <el-button type="primary" size="default">as</el-button>
-  </div>
+  <BasicLayout></BasicLayout>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import BasicLayout from '@/layout/BasicLayout.vue'
+</script>
