@@ -25,20 +25,20 @@ import { constantRoute } from '@/router/routes'
 import { useRoute } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import checkAccess from '@/access/checkAccess'
+import { computed } from 'vue'
 
 const route = useRoute()
 const useStore = useUserStore()
 
 const loginUser = useStore.loginUser
 
-const visibleRoutes = constantRoute.filter((item) => {
-  if (item.meta?.hideInMenu) {
-    return false
-  }
-  if (!checkAccess(loginUser, item.meta?.access)) {
-    return false
-  }
-  return true
+const visibleRoutes = computed(() => {
+  return constantRoute.filter((item) => {
+    if (item.meta?.hideInMenu) {
+      return false
+    }
+    return checkAccess(loginUser, item.meta?.access)
+  })
 })
 </script>
 
