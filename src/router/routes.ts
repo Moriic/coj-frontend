@@ -4,35 +4,88 @@ import ACCESS_ENUM from '@/access/ACCESS_ENUM'
 
 export const constantRoute: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: '浏览题目',
-    component: () => import('@/views/HomeView.vue'),
-  },
-  {
-    path: '/hide',
-    name: '隐藏页面',
-    component: () => import('@/views/HomeView.vue'),
+    path: '/user',
+    name: '用户',
+    component: () => import('@/layout/UserLayout.vue'),
+    children: [
+      {
+        path: '/user/login',
+        name: '用户登录',
+        component: () => import('@/views/user/UserLoginView.vue'),
+      },
+      {
+        path: '/user/register',
+        name: '用户注册',
+        component: () => import('@/views/user/UserRegisterView.vue'),
+      },
+    ],
     meta: {
       hideInMenu: true,
     },
   },
   {
+    path: '/',
+    component: () => import('@/layout/BasicLayout.vue'),
+    name: 'layout',
+    redirect: '/questions',
+    children: [
+      {
+        path: '/questions',
+        name: '浏览题目',
+        component: () => import('@/views/question/QuestionsView.vue'),
+      },
+      {
+        path: '/question_submit',
+        name: '浏览题目提交',
+        component: () => import('@/views/question/QuestionSubmitView.vue'),
+        meta: {
+          access: ACCESS_ENUM.USER,
+        },
+      },
+      {
+        path: '/view/question/:id',
+        name: '在线做题',
+        component: () => import('@/views/question/ViewQuestionView.vue'),
+        props: true,
+        meta: {
+          access: ACCESS_ENUM.USER,
+          hideInMenu: true,
+        },
+      },
+      {
+        path: '/add/question',
+        name: '创建题目',
+        component: () => import('@/views/question/AddQuestionView.vue'),
+        meta: {
+          access: ACCESS_ENUM.ADMIN,
+        },
+      },
+      {
+        path: '/update/question',
+        name: '更新题目',
+        component: () => import('@/views/question/AddQuestionView.vue'),
+        meta: {
+          access: ACCESS_ENUM.ADMIN,
+          hideInMenu: true,
+        },
+      },
+      {
+        path: '/manage/question/',
+        name: '管理题目',
+        component: () => import('@/views/question/ManageQuestionView.vue'),
+        meta: {
+          access: ACCESS_ENUM.ADMIN,
+        },
+      },
+    ],
+  },
+  {
     path: '/noAuth',
     name: '无权限',
-    component: () => import('@/views/NoAuthView.vue'),
-  },
-  {
-    path: '/admin',
-    name: '管理员可见',
-    component: () => import('@/views/AdminView.vue'),
+    component: () => import('@/views/question/ManageQuestionView.vue'),
     meta: {
-      access: ACCESS_ENUM.ADMIN,
+      hideInMenu: true,
     },
-  },
-  {
-    path: '/about',
-    name: '关于我的',
-    component: () => import('@/views/AboutView.vue'),
   },
 ]
 

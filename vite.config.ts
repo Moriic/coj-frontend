@@ -5,7 +5,10 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { visualizer } from 'rollup-plugin-visualizer'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import {
+  ElementPlusResolver,
+  ArcoResolver,
+} from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
   plugins: [
@@ -18,10 +21,15 @@ export default defineConfig({
     }),
     visualizer({ open: true }),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver(), ArcoResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        ElementPlusResolver(),
+        ArcoResolver({
+          sideEffect: true,
+        }),
+      ],
     }),
   ],
   resolve: {
