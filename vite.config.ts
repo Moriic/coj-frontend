@@ -9,10 +9,12 @@ import {
   ElementPlusResolver,
   ArcoResolver,
 } from 'unplugin-vue-components/resolvers'
+import VitePluginVueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   plugins: [
     vue(),
+    VitePluginVueDevTools(),
     createSvgIconsPlugin({
       // Specify the icon folder to be cached
       iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],

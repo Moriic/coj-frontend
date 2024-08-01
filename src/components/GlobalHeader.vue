@@ -42,35 +42,37 @@ import { constantRoute } from '@/router/routes'
 import { useRoute, useRouter } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import checkAccess from '@/access/checkAccess'
-import { computed } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
-import { REMOVE_TOKEN } from '@/utils/token'
+import { storeToRefs } from 'pinia'
 
-const useStore = useUserStore()
+const userStore = useUserStore()
 
-const loginUser = useStore.loginUser
+const { loginUser } = storeToRefs(userStore)
 const router = useRouter()
 const route = useRoute()
 
-const visibleRoutes = computed(() => {
-  return constantRoute[1].children?.filter((item) => {
+const visibleRoutes = ref()
+
+const filterRoute = () => {
+  visibleRoutes.value = constantRoute[1].children?.filter((item) => {
     if (item.meta?.hideInMenu) {
       return false
     }
-    return checkAccess(loginUser, item.meta?.access)
-  })
-})
-
-const goToHome = () => {
-  router.push({
-    path: `/`,
+    return checkAccess(loginUser.value, item.meta?.access)
   })
 }
 
+watch(loginUser, filterRoute)
+onMounted(() => {
+  filterRoute()
+})
+
 const logout = () => {
-  REMOVE_TOKEN()
-  if (route.fullPath === '/questions') router.go(0)
-  else goToHome()
+  userStore.resetStore()
+  router.push({
+    path: `/`,
+  })
 }
 
 const login = () => {
